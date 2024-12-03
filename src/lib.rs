@@ -1,10 +1,11 @@
 #[macro_export]
 macro_rules! impl_cli_main {
     () => {
-        fn main_() -> ::std::process::ExitCode {
-            let args = parse_args();
+        fn main() -> ::std::process::ExitCode {
+            let args = crate::args::parse_args();
 
-            match run(&args) {
+            let run_result: Result<(), crate::error::Error> = run(&args);
+            match run_result {
                 Ok(()) => ::std::process::ExitCode::SUCCESS,
                 Err(error) => {
                     eprintln!("error: {error}");
